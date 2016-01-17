@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#43b53f</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- Shades of blue for monochromatic colour scheme -->
+    <color name="white">#FFFFFF</color>
+    <color name="steelBlue">#8698Bf</color>
+    <color name="greyBlue">#59657F</color>
+    <color name="skyBlue">#B3CBff</color>
+    <color name="blackBlue">#2D3440</color>
+    <color name="darkSkyBlue">#A1B6Ef</color>
+</resources>
