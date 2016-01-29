@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +22,18 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     final String PREFS_FILE = "SmokeFreePreferences";
+    private static final UUID WATCHAPP_UUID = UUID.fromString("0a007011-a69b-4442-8187-f0d57105236b");
+    private static final int DATA_LOG_TAG_XYZ = 42;
+    private StringBuilder resultBuilder = new StringBuilder();
+    public int cigaretteCount = 0;
+    public SharedPreferences sp;
+    PebbleKit.PebbleDataLogReceiver dataloggingReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,33 +42,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        SharedPreferences sp = getSharedPreferences(PREFS_FILE, 0);
+        sp = getSharedPreferences(WATCHAPP_UUID.toString(), 0);
+        cigaretteCount = sp.getInt("numCigarettes", 0);
 
-        // Default to false, make sure we get appropriate user information
-//        if (sp.getBoolean("first_launch", true)) {
-//            Intent intent = new Intent(this, GetUserInfo.class);
-//            startActivity(intent);
-//
-//            // Never show this again.
-//            sp.edit().putBoolean("my_first_time", false).commit();
-//        } else {
-//            setContentView(R.layout.activity_main);
-//            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//            setSupportActionBar(toolbar);
-//        }
-//       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        TextView cigarettesToday = (TextView)findViewById(R.id.cigarettes_smoked);
+        // Display all compass headings received
+        cigarettesToday.setText(cigaretteCount + " Today");
     }
 
     public void addEntry(View v) {
+        cigaretteCount = 0;
+        sp.edit().putInt("numCigarettes", cigaretteCount).commit();
 
-        Toast.makeText(this, "Add New Entry", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Cigarette Count Reset", Toast.LENGTH_LONG).show();
+
+        TextView cigarettesToday = (TextView)findViewById(R.id.cigarettes_smoked);
+        // Display all compass headings received
+        cigarettesToday.setText("0 Today!");
     }
 
     @Override
@@ -72,17 +70,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()) {
             case R.id.action_settings:
                 openSettings();
+                break;
+            case R.id.action_profile:
+                openMyProfile();
+                break;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openMyProfile() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     public void openSettings() {
@@ -93,5 +97,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        PebbleKit.PebbleDataLogReceiver dataloggingReceiver = new PebbleKit.PebbleDataLogReceiver(WATCHAPP_UUID) {
+            @Override
+            public void receiveData(Context context, UUID logUuid, Long timestamp, Long tag, int data) {
+                if(tag.intValue() == DATA_LOG_TAG_XYZ) {
+                    if(data == 1) { // Confirmed cigarette
+                        cigaretteCount += data;
+                        sp.edit().putInt("numCigarettes", cigaretteCount).commit();
+                        System.out.println("num-->" + sp.getInt("numCigarettes", 0));
+                        System.out.println(data);
+                    } else {
+                        System.out.println(data);
+                    }
+                }
+            }
+
+            @Override
+            public void onFinishSession(Context context, UUID logUuid, Long timestamp, Long tag) {
+                super.onFinishSession(context, logUuid, timestamp, tag);
+
+                TextView cigarettesToday = (TextView)findViewById(R.id.cigarettes_smoked);
+                // Display all compass headings received
+                cigarettesToday.setText(cigaretteCount + " Today");
+            }
+        };
+
+        PebbleKit.registerDataLogReceiver(this, dataloggingReceiver);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Always unregister callbacks
+        if(dataloggingReceiver != null) {
+            unregisterReceiver(dataloggingReceiver);
+        }
     }
 }

@@ -22,13 +22,13 @@ import java.util.UUID;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final UUID APP_UUID = UUID.randomUUID();
+    private final UUID WATCHAPP_UUID = UUID.fromString("22abac42-af9f-4223-ba06-d2b491f9456c");
     private static final int DATA_LOG_TAG_COMPASS = 52;
 
     // Must be global for inner class to have write access.
     private StringBuilder resultBuilder = new StringBuilder();
     private PebbleKit.PebbleDataLogReceiver dataloggingReceiver;
-
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         grabPebbleSettings();
 
-        TextView dataLoggedText = (TextView)findViewById(R.id.loggedDataText);
-        dataLoggedText.setText("Waiting for logging...");
-
+        textView = (TextView)findViewById(R.id.loggedDataText);
     }
 
     public void grabPebbleSettings() {
@@ -97,38 +95,35 @@ public class SettingsActivity extends AppCompatActivity {
         Toast.makeText(this, "Notification Delivered to Pebble", Toast.LENGTH_LONG).show();
     }
 
-    public void dataLogButtonClick(View v) {
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        final TextView loggedData = (TextView)findViewById(R.id.loggedDataText);
+        // Define data reception behavior
+        PebbleKit.PebbleDataLogReceiver dataloggingReceiver = new PebbleKit.PebbleDataLogReceiver(WATCHAPP_UUID) {
 
-        if(PebbleKit.isDataLoggingSupported(this)) {
-            PebbleKit.PebbleDataLogReceiver peb = new PebbleKit.PebbleDataLogReceiver(APP_UUID) {
-                @Override
-                public void receiveData(Context context, UUID logUuid, Long timestamp, Long tag,
-                                        byte [] data) {
-
-                    // Example for a compass
-                    if(tag.intValue() == DATA_LOG_TAG_COMPASS) {
-                        // Get the compass value and append to result StringBuilder
-                        resultBuilder.append("Heading: " + data + " degrees");
-                        resultBuilder.append("\n");
-                    }
-
+            @Override
+            public void receiveData(Context context, UUID logUuid, Long timestamp, Long tag, int data) {
+                // Check this is the compass headings log
+                if(tag.intValue() == DATA_LOG_TAG_COMPASS) {
+                    // Get the compass value and append to result StringBuilder
+                    resultBuilder.append("Heading: " + data + " degrees");
+                    resultBuilder.append("\n");
                 }
+            }
 
-                @Override
-                public void onFinishSession(Context context, UUID logUuid, Long timestamp, Long tag) {
-                    super.onFinishSession(context, logUuid, timestamp, tag);
+            @Override
+            public void onFinishSession(Context context, UUID logUuid, Long timestamp, Long tag) {
+                super.onFinishSession(context, logUuid, timestamp, tag);
 
-                    // Display all compass headings received
-                    loggedData.setText("Session finished!\n" + "Results were: \n\n" + resultBuilder.toString());
-                }
+                // Display all compass headings received
+                textView.setText("Session finished!\n" + "Results were: \n\n" + resultBuilder.toString());
+            }
 
-            };
+        };
 
-            PebbleKit.registerDataLogReceiver(this, peb);
-
-        }
+        // Register DataLogging Receiver
+        PebbleKit.registerDataLogReceiver(this, dataloggingReceiver);
     }
 
     @Override
@@ -140,28 +135,4 @@ public class SettingsActivity extends AppCompatActivity {
             unregisterReceiver(dataloggingReceiver);
         }
     }
-
-
-    /*
-
-            if(PebbleKit.isDataLoggingSupported(this)) {
-            PebbleKit.PebbleDataLogReceiver peb = new PebbleKit.PebbleDataLogReceiver(APP_UUID) {
-                @Override
-                public void receiveData(Context context, UUID logUuid, Long timestamp, Long tag,
-                                        byte [] data) {
-
-                }
-
-                @Override
-                public void onFinishSession(Context context, UUID logUuid, Long timestamp, Long tag) {
-                    super.onFinishSession(context, logUuid, timestamp, tag);
-
-                    // Display all compass headings received
-                    textView.setText("Session finished!\n" + "Results were: \n\n" + resultBuilder.toString());
-                }
-
-            };
-        }
-     */
-
 }

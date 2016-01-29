@@ -31,22 +31,11 @@
             android:layout_margin="5dp"
             android:textSize="42dp" />
 
-        <View
-            android:id="@+id/horizontal_rule"
-            android:layout_width="fill_parent"
-            android:layout_height="2dip"
-            android:background="@color/blackBlue" />
-
-        <TextView
-            android:id="@+id/money_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Here are some facts to keep you motivated"
+            android:text="Some facts to keep you motivated"
             android:id="@+id/smallHeader"
             android:layout_gravity="center_horizontal" />
 
@@ -55,6 +44,131 @@
             android:layout_width="fill_parent"
             android:layout_height="2dip"
             android:background="@color/blackBlue" />
+
+        <TableLayout
+            android:id="@+id/info_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center">
+
+                <ImageView
+                    android:src="@drawable/icon_money"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:id="@+id/money_saved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$203.5 Saved"
+                    android:textSize="34sp"
+                    android:textAlignment="center" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/blackBlue" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center">
+
+                <ImageView
+                    android:src="@drawable/icon_health"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:id="@+id/days_earned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+2.67 Days"
+                    android:textSize="34sp"
+                    android:textAlignment="center"
+                    android:paddingTop="5dp" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/blackBlue" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center">
+
+                <ImageView
+                    android:src="@drawable/icon_medal"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:id="@+id/goals_met"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3 Goals Met"
+                    android:textSize="34sp"
+                    android:textAlignment="center"
+                    android:paddingTop="10dp" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/blackBlue" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center">
+
+                <ImageView
+                    android:src="@drawable/image_bar_cigarette"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="-20dp"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:id="@+id/cigarettes_smoked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 Today!"
+                    android:textSize="34sp"
+                    android:textAlignment="center"
+                    android:paddingTop="10dp" />
+            </TableRow>
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:id="@+id/imageView"-->
+                <!--android:src="@drawable/image_bar_cigarette" />-->
+
+        </TableLayout>
 
     </LinearLayout>
 </RelativeLayout>

@@ -22,25 +22,13 @@
         android:id="@+id/sendNotificationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:text="@string/test_notification"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="sendNotificationButtonClick"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Begin Data Logging From Pebble"
-        android:id="@+id/dataLogButton"
-        android:layout_below="@+id/sendNotificationButton"
+        android:onClick="sendNotificationButtonClick"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="dataLogButtonClick"/>
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,8 +36,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="(Text here should change)"
         android:id="@+id/loggedDataText"
-        android:layout_below="@+id/dataLogButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="52dp"
+        android:layout_below="@+id/sendNotificationButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

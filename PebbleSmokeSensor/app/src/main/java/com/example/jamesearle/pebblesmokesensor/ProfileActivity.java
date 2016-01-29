@@ -6,13 +6,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-public class GetUserInfo extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_user_info);
+        setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -25,6 +27,19 @@ public class GetUserInfo extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Spinner turkeySpinner = (Spinner)findViewById(R.id.turkey_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.turkey_options, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        turkeySpinner.setAdapter(adapter);
+
+        Spinner goalSpinner = (Spinner)findViewById(R.id.goal_spinner);
+        ArrayAdapter<CharSequence> goalAdapter = ArrayAdapter.createFromResource(this,
+                R.array.goal_options, android.R.layout.simple_spinner_item);
+        goalSpinner.setAdapter(goalAdapter);
+
     }
 
 }
